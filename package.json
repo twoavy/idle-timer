@@ -1,0 +1,11 @@
+{
+    "name": "@zweiav/idle-timer",
+    "version": "1.0.0",
+    "description": "A timer resetting itself on click & touch",
+    "main": "index.js",
+    "author": "Julian Frank",
+    "license": "ISC",
+    "devDependencies": {
+        "vue": "^2.5.22"
+    }
+}
