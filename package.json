@@ -4,6 +4,10 @@
     "description": "A timer resetting itself on click & touch",
     "main": "index.js",
     "author": "Julian Frank",
+    "repository": {
+        "type": "git",
+        "url" : "https://github.com/twoavy/idle-timer.git"
+    },
     "license": "ISC",
     "devDependencies": {
         "vue": "^2.5.22"
