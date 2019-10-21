@@ -5,9 +5,9 @@ A Vue plugin to track idle time
 ## Installation
 
 ```js
-npm i @zweiav/idle-timer
+npm i @twoavy/idle-timer
 OR
-yarn add @zweiav/idle-timer
+yarn add @twoavy/idle-timer
 ```
 ```js
 import IdleTimer from 'idle-timer';
