@@ -35,7 +35,16 @@ this.$idle.$on('reset', () => {
 })
 ```
 
-manually trigger functions:
+add additional timers:
+```js
+this.$idle.addTimer('my-event', 10) // event name and time in seconds
+
+this.$idle.$on('my-event', () => {
+    console.log('my additional timer called my-event fired')
+})
+```
+
+manually trigger functions (affects all timers):
 
 ```js
 this.$idle.start() 
