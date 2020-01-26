@@ -1,2 +1,11 @@
 node_modules
 package-lock.json
+.idea/.gitignore
+.idea/compiler.xml
+.idea/idle-timer.iml
+.idea/markdown-navigator.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/php.xml
+.idea/vcs.xml
+.idea/inspectionProfiles/Project_Default.xml
