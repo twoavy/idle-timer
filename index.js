@@ -6,6 +6,7 @@ export default {
                     time: options.idleTime || 30,
                     trigger: options.trigger || ['mousedown', 'touchstart'],
                     timer: -1,
+                    paused: false,
                     additionalTimers: []
                 }
             },
@@ -15,6 +16,7 @@ export default {
             methods: {
                 start() {
                     this.stop()
+                    this.paused = false
                     this.timer = setTimeout(() => {
                         this.$emit('idle')
                     }, this.time * 1000)
@@ -24,6 +26,10 @@ export default {
                         }, this.additionalTimers[i].time * 1000, this.additionalTimers[i])
                     }
                 },
+                pause() {
+                    this.paused = true
+                    this.stop()
+                },
                 stop() {
                     clearTimeout(this.timer)
                     for (let i = 0; i < this.additionalTimers.length; i++) {
@@ -32,8 +38,10 @@ export default {
                     }
                 },
                 restart() {
-                    idleEventBus.$emit('reset')
-                    this.start()
+                    if (!this.paused) {
+                        idleEventBus.$emit('reset')
+                        this.start()
+                    }
                 },
                 addTimer(name, time) {
                     this.additionalTimers.push({ name, time, timer: -1 })
