@@ -44,10 +44,11 @@ this.$idle.$on('my-event', () => {
 })
 ```
 
-manually trigger functions (affects all timers):
+manually trigger functions:
 
 ```js
-this.$idle.start() 
-this.$idle.stop() 
+this.$idle.start(name = null)
+this.$idle.pause(name = null)
+this.$idle.stop(name = null)
 this.$idle.restart()
 ```
