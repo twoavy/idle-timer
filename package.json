@@ -1,6 +1,6 @@
 {
   "name": "@twoavy/idle-timer",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A timer resetting itself on click & touch",
   "main": "index.js",
   "author": "Julian Frank",

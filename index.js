@@ -59,9 +59,7 @@ export default {
                 restart() {
                     if (!this.paused) {
                         idleEventBus.$emit('reset')
-                        this.timer = setTimeout(() => {
-                            this.$emit('idle')
-                        }, this.time * 1000)
+                        this.start()
                     }
                     this.additionalTimers.forEach(timer => {
                         if (!timer.paused) {
