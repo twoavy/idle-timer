@@ -15,10 +15,19 @@ import idleTimer from 'idle-timer';
 
 ## Usage
 
-
-```js
+####Initialize (main.js)
+```
 app.use(idleTimer, {
     idleTime: 30, // secs
     trigger: ['mousedown', 'touchstart']
+})
+```
+
+
+####In component (within setup)
+```
+const emitter = inject('idle-emitter')
+emitter.on('idle', () => {
+console.log('idle')
 })
 ```
