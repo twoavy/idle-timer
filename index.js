@@ -61,7 +61,6 @@ export default {
         }
 
         const restart = () => {
-            console.log('restart')
             if (!paused) {
                 emitter.emit('reset')
                 start()
