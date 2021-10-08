@@ -10,45 +10,15 @@ OR
 yarn add @twoavy/idle-timer
 ```
 ```js
-import IdleTimer from 'idle-timer';
+import idleTimer from 'idle-timer';
 ```
 
 ## Usage
 
 
 ```js
-Vue.use(IdleTimer, {
+app.use(idleTimer, {
     idleTime: 30, // secs
     trigger: ['mousedown', 'touchstart']
 })
-```
-
-inside component:
-
-```js
-this.$idle.$on('idle', () => {
-    console.log('idle!')
-})
-
-this.$idle.$on('reset', () => {
-    console.log('resetting idle timer')
-})
-```
-
-add additional timers:
-```js
-this.$idle.addTimer('my-event', 10) // event name and time in seconds
-
-this.$idle.$on('my-event', () => {
-    console.log('my additional timer called my-event fired')
-})
-```
-
-manually trigger functions:
-
-```js
-this.$idle.start(name = null)
-this.$idle.pause(name = null)
-this.$idle.stop(name = null)
-this.$idle.restart()
 ```

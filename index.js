@@ -1,83 +1,91 @@
+import mitt from 'mitt'
+
 export default {
-    install(Vue, options = {}) {
-        const idleEventBus = new Vue({
-            data() {
-                return {
-                    time: options.idleTime || 30,
-                    trigger: options.trigger || ['mousedown', 'touchstart'],
-                    timer: -1,
-                    paused: false,
-                    additionalTimers: []
-                }
-            },
-            created() {
-                this.trigger.forEach(x => document.addEventListener(x, this.restart))
-            },
-            methods: {
-                start(name = null) {
-                    this.stop(name)
-                    const timer = this.getTimer(name)
-                    if (timer) {
-                        timer.paused = false
-                        timer.timer = setTimeout(() => {
-                            this.$emit(timer.name)
-                        }, timer.time * 1000)
-                    } else {
-                        this.paused = false
-                        this.timer = setTimeout(() => {
-                            this.$emit('idle')
-                        }, this.time * 1000)
-                        for (let i = 0; i < this.additionalTimers.length; i++) {
-                            this.additionalTimers[i].timer = setTimeout(timer => {
-                                this.$emit(timer.name)
-                            }, this.additionalTimers[i].time * 1000, this.additionalTimers[i])
-                        }
-                    }
-                },
-                pause(name = null) {
-                    this.stop(name)
-                    const timer = this.getTimer(name)
-                    if (timer) {
-                        this.additionalTimers[timer.index].paused = true
-                    } else {
-                        this.paused = true
-                    }
-                },
-                stop(name = null) {
-                    const timer = this.getTimer(name)
-                    if (timer) {
-                        clearTimeout(timer.timer)
-                        timer.timer = -1
-                    } else {
-                        clearTimeout(this.timer)
-                        for (let i = 0; i < this.additionalTimers.length; i++) {
-                            clearTimeout(this.additionalTimers[i].timer)
-                            this.additionalTimers[i].timer = -1
-                        }
-                    }
-                },
-                restart() {
-                    if (!this.paused) {
-                        idleEventBus.$emit('reset')
-                        this.start()
-                    }
-                    this.additionalTimers.forEach(timer => {
-                        if (!timer.paused) {
-                            this.start(timer.name)
-                        }
-                    })
-                },
-                addTimer(name, time) {
-                    this.additionalTimers.push({ name, time, timer: -1, paused: false })
-                },
-                getTimer(name) {
-                    if (name && name.length > 0) {
-                        return this.additionalTimers.find(x => x.name === name)
-                    }
-                    return null
+    install(app, options = {}) {
+        const time = options.idleTime || 30
+        const trigger = options.trigger || ['mousedown', 'touchstart']
+        let timer = -1
+        let paused = false
+        const additionalTimers = []
+
+        const emitter = mitt()
+        app.provide('idle-emitter', emitter)
+
+        const start = (name = null) => {
+            stop(name)
+            const timerLocal = getTimer(name)
+            if (timerLocal) {
+                timerLocal.paused = false
+                timerLocal.timer = setTimeout(() => {
+                    emitter.emit(timer.name)
+                }, timer.time * 1000)
+            } else {
+                paused = false
+                timer = setTimeout(() => {
+                    emitter.emit('idle')
+                }, time * 1000)
+                for (let i = 0; i < additionalTimers.length; i++) {
+                    additionalTimers[i].timer = setTimeout(
+                        (timer) => {
+                            emitter.emit(timer.name)
+                        },
+                        additionalTimers[i].time * 1000,
+                        additionalTimers[i],
+                    )
                 }
             }
-        })
-        Vue.prototype.$idle = idleEventBus
-    }
+        }
+
+        const pause = (name = null) => {
+            stop(name)
+            const timerLocal = getTimer(name)
+            if (timerLocal) {
+                additionalTimers[timerLocal.index].paused = true
+            } else {
+                paused = true
+            }
+        }
+
+        const stop = (name = null) => {
+            const timerLocal = getTimer(name)
+            if (timerLocal) {
+                clearTimeout(timerLocal.timer)
+                timerLocal.timer = -1
+            } else {
+                clearTimeout(timer)
+                for (let i = 0; i < additionalTimers.length; i++) {
+                    clearTimeout(additionalTimers[i].timer)
+                    additionalTimers[i].timer = -1
+                }
+            }
+        }
+
+        const restart = () => {
+            console.log('restart')
+            if (!paused) {
+                emitter.emit('reset')
+                start()
+            }
+            additionalTimers.forEach((timer) => {
+                if (!timer.paused) {
+                    start(timer.name)
+                }
+            })
+        }
+
+        const addTimer = (name, time) => {
+            additionalTimers.push({ name, time, timer: -1, paused: false })
+        }
+
+        const getTimer = (name) => {
+            if (name && name.length > 0) {
+                return additionalTimers.find((x) => x.name === name)
+            }
+            return null
+        }
+
+        trigger.forEach((x) => document.addEventListener(x, restart))
+
+        app.provide('idle-timer', options)
+    },
 }
