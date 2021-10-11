@@ -26,8 +26,12 @@ app.use(idleTimer, {
 
 ####In component (within setup)
 ```
-const emitter = inject('idle-emitter')
-emitter.on('idle', () => {
-console.log('idle')
+// idle event
+const idleTimer = inject('idle-timer')
+idleTimer.emitter.on('idle', () => {
+    console.log('idle')
 })
+
+// restart
+idleTimer.restart()
 ```
