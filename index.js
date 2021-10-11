@@ -21,16 +21,25 @@ export default {
                 timerLocal.paused = false
                 timerLocal.timer = setTimeout(() => {
                     emitter.emit(timer.name)
+                    if (debug) {
+                        console.log('idletimerEmit:' + timer.name)
+                    }
                 }, timer.time * 1000)
             } else {
                 paused = false
                 timer = setTimeout(() => {
                     emitter.emit('idle')
+                    if (debug) {
+                        console.log('idletimerEmit: idle')
+                    }
                 }, time * 1000)
                 for (let i = 0; i < additionalTimers.length; i++) {
                     additionalTimers[i].timer = setTimeout(
                         (timer) => {
                             emitter.emit(timer.name)
+                            if (debug) {
+                                console.log('idletimerEmit:' + timer.name)
+                            }
                         },
                         additionalTimers[i].time * 1000,
                         additionalTimers[i],
@@ -75,6 +84,9 @@ export default {
             }
             if (!paused) {
                 emitter.emit('reset')
+                if (debug) {
+                    console.log('idletimerEmit: reset')
+                }
                 start()
             }
             additionalTimers.forEach((timer) => {
