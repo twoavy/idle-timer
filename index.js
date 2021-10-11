@@ -9,7 +9,6 @@ export default {
         const additionalTimers = []
 
         const emitter = mitt()
-        app.provide('idle-emitter', emitter)
 
         const start = (name = null) => {
             stop(name)
@@ -85,6 +84,6 @@ export default {
 
         trigger.forEach((x) => document.addEventListener(x, restart))
 
-        app.provide('idle-timer', options)
+        app.provide('idle-timer', { emitter, restart, addTimer, pause })
     },
 }
